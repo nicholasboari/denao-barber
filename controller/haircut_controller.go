@@ -24,17 +24,15 @@ func NewHaircutController(service service.HaircutService) *HaircutController {
 func (controller *HaircutController) Create(ctx *gin.Context) {
 	log.Info().Msg("create haircut")
 	var request request.CreateHaircutRequest
-	err := ctx.ShouldBindJSON(&request)
-	if err != nil {
-		ctx.JSON(404, err)
+	if err := ctx.ShouldBindJSON(&request); err != nil {
+		ctx.JSON(http.StatusBadRequest, err)
 		return
 	}
-
 	// yyyy-MM-dd
 	// 2006-01-13 15:00:00
 	date, err := time.Parse(time.DateTime, request.Date)
 	if err != nil {
-		ctx.JSON(404, err)
+		ctx.JSON(http.StatusBadRequest, err)
 		return
 	}
 	haircut := model.Haircut{NameClient: request.NameClient, Price: request.Price, Date: date}
