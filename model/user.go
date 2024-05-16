@@ -7,10 +7,10 @@ import (
 )
 
 type User struct {
-	ID       uuid.UUID `json:"id" gorm:"type:uuid"`
 	Name     string    `json:"name"`
 	Email    string    `json:"email"`
 	Password []byte    `json:"-"`
+	ID       uuid.UUID `json:"id" gorm:"type:uuid"`
 }
 
 func (u *User) ValidatePassword(password string) bool {
