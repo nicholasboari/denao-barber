@@ -22,12 +22,18 @@ func main() {
 	validate := validator.New()
 
 	db.Table("haircuts").AutoMigrate(&model.Haircut{})
+	db.Table("users").AutoMigrate(&model.User{})
 
+	// haircut
 	haircutRepository := repository.NewHaircutRepositoryImpl(db)
 	haircutService := service.NewHaircutServiceImpl(haircutRepository, validate)
 	haircutController := controller.NewHaircutController(haircutService)
 
-	routes := router.NewRouter(haircutController)
+	// user
+	userRepository := repository.NewUserRepositoryImpl(db)
+	userService := service.NewUserServiceImpl(userRepository, validate)
+	userController := controller.NewUserController(userService)
+	routes := router.NewRouter(haircutController, userController)
 
 	server := http.Server{
 		Addr:    ":8000",

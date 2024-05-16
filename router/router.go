@@ -5,11 +5,12 @@ import (
 	"github.com/nicholasboari/denao-barber/controller"
 )
 
-func NewRouter(haircutController *controller.HaircutController) *gin.Engine {
+func NewRouter(haircutController *controller.HaircutController, userController *controller.UserController) *gin.Engine {
 	router := gin.Default()
 
 	haircutRouter := router.Group("/haircuts")
+	userRouter := router.Group("/users")
 	haircutRouter.POST("", haircutController.Create)
-
+	userRouter.POST("", userController.Create)
 	return router
 }
