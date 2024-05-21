@@ -5,6 +5,7 @@ import (
 	"net/mail"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/nicholasboari/denao-barber/data/request"
 	"github.com/nicholasboari/denao-barber/data/response"
 	"github.com/nicholasboari/denao-barber/model"
@@ -57,4 +58,25 @@ func (controller *UserController) Create(ctx *gin.Context) {
 func valid(email string) bool {
 	_, err := mail.ParseAddress(email)
 	return err == nil
+}
+
+func (controller *UserController) GetUserByID(ctx *gin.Context) {
+	log.Info().Msg("get user by ID")
+	var idString = ctx.Param("id")
+	ID, err := uuid.Parse(idString)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "Invalid UUID"})
+		return
+	}
+	var data *model.User
+	data, err = controller.userService.GetUserByID(ID)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, response.Response{
+			Status: "error to get user",
+			Data:   err,
+		})
+		return
+	}
+	ctx.Header("Content-Type", "application/json")
+	ctx.JSON(http.StatusCreated, gin.H{"data": data})
 }
