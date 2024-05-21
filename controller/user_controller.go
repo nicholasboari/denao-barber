@@ -80,3 +80,23 @@ func (controller *UserController) GetUserByID(ctx *gin.Context) {
 	ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusCreated, gin.H{"data": data})
 }
+
+func (controller *UserController) Delete(ctx *gin.Context) {
+	log.Info().Msg("delete user by ID")
+	var idString = ctx.Param("id")
+	ID, err := uuid.Parse(idString)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "Invalid UUID"})
+		return
+	}
+	err = controller.userService.Delete(ID)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, response.Response{
+			Status: "error to delete user",
+			Data:   err.Error(),
+		})
+		return
+	}
+	ctx.Header("Content-Type", "application/json")
+	ctx.JSON(http.StatusNoContent, nil)
+}

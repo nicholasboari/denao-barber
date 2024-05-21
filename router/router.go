@@ -13,5 +13,6 @@ func NewRouter(haircutController *controller.HaircutController, userController *
 	haircutRouter.POST("", haircutController.Create)
 	userRouter.POST("", userController.Create)
 	userRouter.GET("/:id", userController.GetUserByID)
+	userRouter.DELETE("/:id", userController.Delete)
 	return router
 }

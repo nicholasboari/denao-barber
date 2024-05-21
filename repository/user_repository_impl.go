@@ -25,3 +25,15 @@ func (u *UserRepositoryImpl) GetUserByID(ID uuid.UUID) (*model.User, error) {
 	err := u.Db.Model(model.User{ID: ID}).First(&result).Error
 	return &result, err
 }
+
+// Delete implements UserRepository
+func (u *UserRepositoryImpl) Delete(ID uuid.UUID) error {
+	user, err := u.GetUserByID(ID)
+	if err != nil {
+		return err
+	}
+	if err := u.Db.Delete(&user).Error; err != nil {
+		return err
+	}
+	return nil
+}

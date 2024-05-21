@@ -29,3 +29,8 @@ func (u *UserServiceImpl) Create(user *model.User) error {
 func (u *UserServiceImpl) GetUserByID(ID uuid.UUID) (*model.User, error) {
 	return u.UserRepository.GetUserByID(ID)
 }
+
+// Delete implements UserService
+func (u *UserServiceImpl) Delete(ID uuid.UUID) error {
+	return u.UserRepository.Delete(ID)
+}
