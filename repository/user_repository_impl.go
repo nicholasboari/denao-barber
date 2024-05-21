@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"github.com/nicholasboari/denao-barber/helper"
 	"github.com/nicholasboari/denao-barber/model"
 	"gorm.io/gorm"
 )
@@ -15,7 +14,6 @@ func NewUserRepositoryImpl(Db *gorm.DB) UserRepository {
 }
 
 // Save implements UserRepository
-func (u *UserRepositoryImpl) Save(user *model.User) {
-	result := u.Db.Create(&user)
-	helper.ErrorPanic(result.Error)
+func (u *UserRepositoryImpl) Save(user *model.User) error {
+	return u.Db.Create(&user).Error
 }

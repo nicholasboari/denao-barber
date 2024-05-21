@@ -2,7 +2,6 @@ package service
 
 import (
 	"github.com/go-playground/validator/v10"
-	"github.com/nicholasboari/denao-barber/helper"
 	"github.com/nicholasboari/denao-barber/model"
 	"github.com/nicholasboari/denao-barber/repository"
 )
@@ -17,8 +16,10 @@ func NewUserServiceImpl(userRepository repository.UserRepository, validate *vali
 }
 
 // Create implements UserService
-func (u *UserServiceImpl) Create(user *model.User) {
+func (u *UserServiceImpl) Create(user *model.User) error {
 	err := u.Validate.Struct(user)
-	helper.ErrorPanic(err)
-	u.UserRepository.Save(user)
+	if err != nil {
+		return err
+	}
+	return u.UserRepository.Save(user)
 }

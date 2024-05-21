@@ -32,7 +32,6 @@ func (controller *UserController) Create(ctx *gin.Context) {
 	}
 	if !valid(request.Email) {
 		ctx.JSON(http.StatusBadRequest, response.Response{
-			Code:   http.StatusBadRequest,
 			Status: "email is not valid",
 		})
 		return
@@ -43,7 +42,14 @@ func (controller *UserController) Create(ctx *gin.Context) {
 		return
 	}
 	user := model.User{Name: request.Name, Email: request.Email, Password: password}
-	controller.userService.Create(&user)
+	err = controller.userService.Create(&user)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, response.Response{
+			Status: "error to create user",
+			Data:   err,
+		})
+		return
+	}
 	ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusCreated, gin.H{"data": user})
 }
