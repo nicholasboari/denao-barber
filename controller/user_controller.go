@@ -73,7 +73,21 @@ func (controller *UserController) GetUserByID(ctx *gin.Context) {
 		return
 	}
 	ctx.Header("Content-Type", "application/json")
-	ctx.JSON(http.StatusCreated, gin.H{"data": data})
+	ctx.JSON(http.StatusOK, gin.H{"data": data})
+}
+
+func (controller *UserController) FindAll(ctx *gin.Context) {
+	log.Info().Msg("find all users")
+	users, err := controller.userService.FindAll()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, response.Response{
+			Status: "error to fetch all users",
+			Data:   err,
+		})
+		return
+	}
+	ctx.Header("Content-Type", "application/json")
+	ctx.JSON(http.StatusOK, gin.H{"data": users})
 }
 
 func (controller *UserController) Delete(ctx *gin.Context) {

@@ -30,6 +30,11 @@ func (u *UserServiceImpl) GetUserByID(ID uuid.UUID) (*model.User, error) {
 	return u.UserRepository.GetUserByID(ID)
 }
 
+// FindAll implements UserService
+func (u *UserServiceImpl) FindAll() ([]*model.User, error) {
+	return u.UserRepository.FindAll()
+}
+
 // Delete implements UserService
 func (u *UserServiceImpl) Delete(ID uuid.UUID) error {
 	return u.UserRepository.Delete(ID)

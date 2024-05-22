@@ -45,9 +45,18 @@ func (u *UserRepositoryImpl) Update(user *model.User) (*model.User, error) {
 		return nil, err
 	}
 	existingUser.Name = user.Name
-
 	if err = u.Db.Save(existingUser).Error; err != nil {
 		return nil, err
 	}
 	return existingUser, nil
+}
+
+// FindAll implements UserRepository
+func (u *UserRepositoryImpl) FindAll() ([]*model.User, error) {
+	var users []*model.User
+	result := u.Db.Find(&users)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return users, nil
 }
