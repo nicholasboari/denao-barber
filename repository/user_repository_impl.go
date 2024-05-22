@@ -37,3 +37,17 @@ func (u *UserRepositoryImpl) Delete(ID uuid.UUID) error {
 	}
 	return nil
 }
+
+// Update implements UserRepository
+func (u *UserRepositoryImpl) Update(user *model.User) (*model.User, error) {
+	existingUser, err := u.GetUserByID(user.ID)
+	if err != nil {
+		return nil, err
+	}
+	existingUser.Name = user.Name
+
+	if err = u.Db.Save(existingUser).Error; err != nil {
+		return nil, err
+	}
+	return existingUser, nil
+}

@@ -34,3 +34,12 @@ func (u *UserServiceImpl) GetUserByID(ID uuid.UUID) (*model.User, error) {
 func (u *UserServiceImpl) Delete(ID uuid.UUID) error {
 	return u.UserRepository.Delete(ID)
 }
+
+// Update implements UserService
+func (u *UserServiceImpl) Update(user *model.User) (*model.User, error) {
+	err := u.Validate.Struct(user)
+	if err != nil {
+		return nil, err
+	}
+	return u.UserRepository.Update(user)
+}

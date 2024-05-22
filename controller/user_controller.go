@@ -55,11 +55,6 @@ func (controller *UserController) Create(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, gin.H{"data": user})
 }
 
-func valid(email string) bool {
-	_, err := mail.ParseAddress(email)
-	return err == nil
-}
-
 func (controller *UserController) GetUserByID(ctx *gin.Context) {
 	log.Info().Msg("get user by ID")
 	var idString = ctx.Param("id")
@@ -99,4 +94,37 @@ func (controller *UserController) Delete(ctx *gin.Context) {
 	}
 	ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusNoContent, nil)
+}
+
+func (controller *UserController) Update(ctx *gin.Context) {
+	log.Info().Msg("update user")
+	var request request.UpdateUserRequest
+	if err := ctx.ShouldBindJSON(&request); err != nil {
+		ctx.JSON(http.StatusBadRequest, err)
+		return
+	}
+	ID, err := uuid.Parse(request.ID)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid UUID"})
+		return
+	}
+	user := &model.User{
+		ID:   ID,
+		Name: request.Name,
+	}
+	userUpdated, err := controller.userService.Update(user)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, response.Response{
+			Status: "error to update user",
+			Data:   err,
+		})
+		return
+	}
+	ctx.Header("Content-Type", "application/json")
+	ctx.JSON(http.StatusOK, gin.H{"data": userUpdated})
+}
+
+func valid(email string) bool {
+	_, err := mail.ParseAddress(email)
+	return err == nil
 }
