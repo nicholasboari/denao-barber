@@ -5,7 +5,9 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/nicholasboari/denao-barber/data/request"
+	"github.com/nicholasboari/denao-barber/data/response"
 	"github.com/nicholasboari/denao-barber/model"
 	"github.com/nicholasboari/denao-barber/service"
 	"github.com/rs/zerolog/log"
@@ -39,4 +41,25 @@ func (controller *HaircutController) Create(ctx *gin.Context) {
 	controller.haircutService.Create(&haircut)
 	ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusCreated, gin.H{"data": haircut})
+}
+
+func (controller *HaircutController) GetHaircutByID(ctx *gin.Context) {
+	log.Info().Msg("get haircut by ID")
+	var idString = ctx.Param("id")
+	ID, err := uuid.Parse(idString)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "Invalid UUID"})
+		return
+	}
+	var data *model.Haircut
+	data, err = controller.haircutService.GetHaircutByID(ID)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, response.Response{
+			Status: "error to get haircut",
+			Data:   err,
+		})
+		return
+	}
+	ctx.Header("Content-Type", "application/json")
+	ctx.JSON(http.StatusOK, gin.H{"data": data})
 }

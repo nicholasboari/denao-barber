@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/go-playground/validator/v10"
+	"github.com/google/uuid"
 	"github.com/nicholasboari/denao-barber/helper"
 	"github.com/nicholasboari/denao-barber/model"
 	"github.com/nicholasboari/denao-barber/repository"
@@ -22,4 +23,9 @@ func (h *HaircutServiceImpl) Create(haircut *model.Haircut) {
 	err := h.Validate.Struct(haircut)
 	helper.ErrorPanic(err)
 	h.HaircutRepository.Save(haircut)
+}
+
+// GetHaircutByID implements HaircutService
+func (h *HaircutServiceImpl) GetHaircutByID(ID uuid.UUID) (*model.Haircut, error) {
+	return h.HaircutRepository.GetHaircutByID(ID)
 }

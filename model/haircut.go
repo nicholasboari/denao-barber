@@ -1,10 +1,20 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+	"gorm.io/gorm"
+)
 
 type Haircut struct {
 	Date       time.Time `json:"date"`
 	NameClient string    `json:"client_name"`
-	ID         uint      `json:"id" gorm:"primary_key"`
+	ID         uuid.UUID `json:"id" gorm:"type:uuid"`
 	Price      float64   `json:"price"`
+}
+
+func (u *Haircut) BeforeCreate(tx *gorm.DB) (err error) {
+	u.ID = uuid.New()
+	return nil
 }
