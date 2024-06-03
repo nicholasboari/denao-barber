@@ -43,6 +43,26 @@ func (controller *HaircutController) Create(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, gin.H{"data": haircut})
 }
 
+func (controller *HaircutController) Delete(ctx *gin.Context) {
+	log.Info().Msg("delete haircut by ID")
+	var idString = ctx.Param("id")
+	ID, err := uuid.Parse(idString)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "Invalid UUID"})
+		return
+	}
+	err = controller.haircutService.Delete(ID)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, response.Response{
+			Status: "error to delete haircut",
+			Data:   err.Error(),
+		})
+		return
+	}
+	ctx.Header("Content-Type", "application/json")
+	ctx.JSON(http.StatusNoContent, nil)
+}
+
 func (controller *HaircutController) GetHaircutByID(ctx *gin.Context) {
 	log.Info().Msg("get haircut by ID")
 	var idString = ctx.Param("id")

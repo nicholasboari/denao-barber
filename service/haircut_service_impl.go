@@ -25,6 +25,11 @@ func (h *HaircutServiceImpl) Create(haircut *model.Haircut) {
 	h.HaircutRepository.Save(haircut)
 }
 
+// Delete implements HaircutService
+func (h *HaircutServiceImpl) Delete(ID uuid.UUID) error {
+	return h.HaircutRepository.Delete(ID)
+}
+
 // GetHaircutByID implements HaircutService
 func (h *HaircutServiceImpl) GetHaircutByID(ID uuid.UUID) (*model.Haircut, error) {
 	return h.HaircutRepository.GetHaircutByID(ID)

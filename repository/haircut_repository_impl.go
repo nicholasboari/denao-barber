@@ -21,6 +21,18 @@ func (h *HaircutRepositoryImpl) Save(haircut *model.Haircut) {
 	helper.ErrorPanic(result.Error)
 }
 
+// Delete implements HaircutRepository
+func (h *HaircutRepositoryImpl) Delete(ID uuid.UUID) error {
+	haircut, err := h.GetHaircutByID(ID)
+	if err != nil {
+		return err
+	}
+	if err := h.Db.Delete(&haircut).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 // GetHaircutByID implements HaircutRepository
 func (h *HaircutRepositoryImpl) GetHaircutByID(ID uuid.UUID) (*model.Haircut, error) {
 	var result model.Haircut
