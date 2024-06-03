@@ -63,3 +63,18 @@ func (controller *HaircutController) GetHaircutByID(ctx *gin.Context) {
 	ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, gin.H{"data": data})
 }
+
+func (controller *HaircutController) GetAllHaircuts(ctx *gin.Context) {
+	log.Info().Msg("get all haircuts")
+	var data []*model.Haircut
+	data, err := controller.haircutService.GetAllHaircuts()
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, response.Response{
+			Status: "error to get all haircuts",
+			Data:   err,
+		})
+		return
+	}
+	ctx.Header("Content-Type", "application/json")
+	ctx.JSON(http.StatusOK, gin.H{"data": data})
+}

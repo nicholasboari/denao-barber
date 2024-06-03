@@ -11,7 +11,9 @@ func NewRouter(haircutController *controller.HaircutController, userController *
 	haircutRouter := router.Group("/haircuts")
 	userRouter := router.Group("/users")
 	haircutRouter.POST("", haircutController.Create)
+	haircutRouter.GET("/", haircutController.GetAllHaircuts)
 	haircutRouter.GET("/:id", haircutController.GetHaircutByID)
+
 	userRouter.POST("/", userController.Create)
 	userRouter.GET("/:id", userController.GetUserByID)
 	userRouter.GET("/", userController.FindAll)

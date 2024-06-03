@@ -29,3 +29,8 @@ func (h *HaircutServiceImpl) Create(haircut *model.Haircut) {
 func (h *HaircutServiceImpl) GetHaircutByID(ID uuid.UUID) (*model.Haircut, error) {
 	return h.HaircutRepository.GetHaircutByID(ID)
 }
+
+// GetAllHaircuts implements HaircutService
+func (h *HaircutServiceImpl) GetAllHaircuts() ([]*model.Haircut, error) {
+	return h.HaircutRepository.GetAllHaircuts()
+}

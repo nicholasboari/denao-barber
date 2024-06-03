@@ -27,3 +27,10 @@ func (h *HaircutRepositoryImpl) GetHaircutByID(ID uuid.UUID) (*model.Haircut, er
 	err := h.Db.Model(model.Haircut{ID: ID}).First(&result).Error
 	return &result, err
 }
+
+// GetAllHaircuts implements HaircutRepository
+func (h *HaircutRepositoryImpl) GetAllHaircuts() ([]*model.Haircut, error) {
+	var result []*model.Haircut
+	err := h.Db.Find(&result).Error
+	return result, err
+}

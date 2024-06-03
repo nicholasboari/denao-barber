@@ -8,4 +8,5 @@ import (
 type HaircutService interface {
 	Create(haircut *model.Haircut)
 	GetHaircutByID(ID uuid.UUID) (*model.Haircut, error)
+	GetAllHaircuts() ([]*model.Haircut, error)
 }
